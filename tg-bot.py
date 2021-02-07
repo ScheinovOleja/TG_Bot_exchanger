@@ -6,6 +6,7 @@ from telebot import types
 min_amount = 0
 max_amount = 0
 total_amount_text = ''
+num_receive = ''
 
 parser = GetCurrency()
 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -48,13 +49,13 @@ def message_one(message):
 
 
 def treatment_give(call, text, markup_key):
-    global min_amount, max_amount, total_amount_text
+    global min_amount, max_amount, total_amount_text, num_receive
     dict_values = []
     give_currency = parser.parsing_give()
-    num_recive = [num[1] for num in give_currency.items() if num[0] == text[:-2]]
-    min_amount = float(num_recive[0][1][0])
-    max_amount = float(num_recive[0][1][1])
-    for element in parser.parsing_get(num_recive[0][0]):
+    num_receive = [num[1] for num in give_currency.items() if num[0] == text[:-2]]
+    min_amount = float(num_receive[0][1][0])
+    max_amount = float(num_receive[0][1][1])
+    for element in parser.parsing_get(num_receive[0][0]):
         dict_values.append(element[0])
         markup_key.add(types.InlineKeyboardButton(element[0] + f' {element[1]} ' + f'({element[2]})',
                                                   callback_data=f'{element[0]}_2'))
@@ -63,9 +64,7 @@ def treatment_give(call, text, markup_key):
 
 
 def determining_currency(text):
-    global total_amount_text
-    give_currency = parser.parsing_give()
-    num_receive = [num[1] for num in give_currency.items() if num[0] == text[:-2]]
+    global total_amount_text, num_receive
     for element in parser.parsing_get(num_receive[0][0]):
         if element[0] == text[:-2]:
             total_amount_text = element[1]
