@@ -46,6 +46,7 @@ def message_one(message):
         for element in parser.parsing_give():
             markup_key.add(types.InlineKeyboardButton(element, callback_data=f'{element}_1'))
         bot.send_message(message.chat.id, 'Выбери валюту, которую нужно обменять 👇', reply_markup=markup_key)
+        return True
 
 
 def treatment_give(call, text, markup_key):
@@ -55,7 +56,8 @@ def treatment_give(call, text, markup_key):
     num_receive = [num[1] for num in give_currency.items() if num[0] == text[:-2]]
     min_amount = float(num_receive[0][1][0])
     max_amount = float(num_receive[0][1][1])
-    for element in parser.parsing_get(num_receive[0][0]):
+    elements = parser.parsing_get(num_receive[0][0])
+    for element in elements:
         dict_values.append(element[0])
         markup_key.add(types.InlineKeyboardButton(element[0] + f' {element[1]} ' + f'({element[2]})',
                                                   callback_data=f'{element[0]}_2'))
@@ -96,6 +98,8 @@ def calc_total_amount(custom_number):
 
 
 def get_amount(message):
+    if message_one(message):
+        return
     try:
         if float(message.text) < min_amount or float(message.text) > max_amount:
             bot.send_message(message.chat.id, f'Дурак чтоль? Сказал же, Минимум:{min_amount}, максимум:{max_amount}')

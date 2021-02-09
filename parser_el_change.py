@@ -16,6 +16,7 @@ class GetCurrency:
         self.get_list = []
 
     def parsing_give(self):
+        self.give_away_dict = {}
         self.give_away = self.soup.find('div', {'class': 'otdaete_wrap'}).find_all('div', {"class": "obmen_btns"})
         for currency in self.give_away:
             self.give_away_dict[f'{currency.attrs["title"]}'] = [currency.attrs["num_recive"],
@@ -24,6 +25,7 @@ class GetCurrency:
         return self.give_away_dict
 
     def parsing_get(self, num_receive):
+        self.get_list = []
         self.get = self.soup.find('div', {'class': "poluchaete_wrap"}).find('div', {"num_recive": num_receive}).find_all(
             'div', {"class": "obmen_btns"})
         for currency in self.get:
